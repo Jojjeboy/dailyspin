@@ -59,21 +59,33 @@ button {
     0% {
         color: #fff;
     }
+
     100% {
         color: #AD301B
     }
 }
 
 @keyframes fadein {
-    from { color: #fff; }
-    to   { color: #AD301B }
+    from {
+        color: #fff;
+        border-top: 1px solid #fff;
+        border-bottom: 1px solid #fff;
+    }
+
+    to {
+        color: #AD301B;
+        border-top: 1px solid #AD301B;
+        border-bottom: 1px solid #AD301B;
+    }
 }
 
 
 #name.timesUp {
-    animation: fadein 5s;
+    animation: fadein 10s;
     animation-iteration-count: 1;
-    color:  #AD301B;
+    color: #AD301B;
+    border-top: 1px solid #AD301B;
+    border-bottom: 1px solid #AD301B;
 }
 
 .bg-peach {

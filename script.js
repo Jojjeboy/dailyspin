@@ -26,20 +26,12 @@ let currentSpeakingMember;
 const nameElm = document.getElementById('name');
 const debugElm = document.getElementById('debug');
 
-const speachTime = 90;
+const speachTime = 120;
 let speachInterval;
 
 
 document.addEventListener('DOMContentLoaded', onInit);
 
-
-
-// 1. Först kolla om det finns en inläst lista i local storage
-// 1a. Gör det det, ta den listan och använd den som lista
-// 1b. Gör det inte det, spara ner listan med alla namn i local storage 
-// 2. Plocka upp ett namn ur listan 
-// 2a. Spara det i localstorage som currentSpeakingmember och läs in det i en variabel typ currentName och  och skriv ut de till html 
-// 3. Ta bort det från listan och spara om listan i local storage
 
 
 function onInit() {
@@ -74,8 +66,6 @@ function onInit() {
 
 
 function onNameClick(evt) {
-
-
     if (evt.detail === 2) {
         onNextBtnClick();
     }
@@ -97,7 +87,6 @@ function onNextBtnClick() {
 
         setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
         setNameInDiv(currentSpeakingMember);
-
     }
     if (debug) {
         debugElm.innerHTML = listOfusers;
@@ -173,8 +162,6 @@ function popRandomNameFromLocalStorage() {
         // Vi är klara
         reset();
         setNameInDiv('Klar');
-
-        // Visa en starta om knapp
     }
 }
 
