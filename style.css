@@ -1,0 +1,61 @@
+.hidden {
+    visibility: hidden;
+}
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    height: 10vh;
+    background-color: #E8C3B9;
+    background-color: #98BEC8;
+    
+    font-family: Inter, "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+    color: #fff;
+
+    font-family: 'Oswald', sans-serif;
+
+    font-style: normal;
+    font-variant-ligatures: normal;
+    font-variant-caps: normal;
+    font-variant-numeric: normal;
+    font-variant-east-asian: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+
+button{
+    font: inherit;
+}
+
+#resetbtn.hidden {
+    visibility: hidden;
+}
+
+#name {
+    font-size: 6em;
+    cursor: pointer;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-top: 250px;
+}
+
+
+.bg-peach{
+    background-color: #E8C3B9;
+}
+.bg-greyblue{
+    background-color: #98BEC8;
+}
