@@ -23,7 +23,11 @@ let allMembers = [
 
 let listOfusers = [];
 let currentSpeakingMember;
+let previusSpeakingMember;
+
 const nameElm = document.getElementById('name');
+const prevElm = document.getElementById('prev');
+
 const debugElm = document.getElementById('debug');
 
 const speachTime = 120;
@@ -41,18 +45,16 @@ function onInit() {
         // Finns inget sparat i localstorage
         // Spara hela listan
         setListOfNamesLeftToSpeakInLocalStorage(allMembers);
-
+        currentSpeakingMember = null;
     }
     else {
-        // Finns namn i localstorage
-        let currentSpeakingmember = getCurrrentSpeakingMemberInLocalStorage();
         // Hämta ut currentSpeakingMember
-
+        currentSpeakingmember = getCurrrentSpeakingMemberInLocalStorage();
+         
         if (currentSpeakingmember === null) {
             // Mötet har precis börjat, ingen har börjat prata
             // Visa statiskt Text
             setNameInDiv('Tryck för att börja');
-
         }
         else {
             timing();
@@ -60,29 +62,23 @@ function onInit() {
             setNameInDiv(currentSpeakingmember);
         }
 
-    }
-
-}
-
-
-function onNameClick(evt) {
-    if (evt.detail === 2) {
-        onNextBtnClick();
-    }
-    else if (evt.detail === 3) {
-        if (window.confirm('Starta om?')) {
-            reset();
-        }
+        // Hämta ut förra talaren
+        previusSpeakingMember = getPreviusSpeakingMemberInLocalStorage();
     }
 }
-
 
 
 function onNextBtnClick() {
     timing();
+
+    // Spara undan föregående talare
+    speakingMember = getCurrrentSpeakingMemberInLocalStorage();
+    if (speakingMember !== undefined) {
+        setPreviusSpeakingMemberInLocalStorage(speakingMember);
+    }
+
     // Hämta ut ett random name från listan
     let currentSpeakingMember = popRandomNameFromLocalStorage();
-
     if (currentSpeakingMember !== undefined) {
 
         setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
@@ -91,6 +87,14 @@ function onNextBtnClick() {
     if (debug) {
         debugElm.innerHTML = listOfusers;
     }
+}
+
+
+function previousSpeaker() {
+    setNameInDiv(getPreviusSpeakingMemberInLocalStorage());
+    setCurrrentSpeakingMemberInLocalStorage(getPreviusSpeakingMemberInLocalStorage());
+
+    prevElm.disabled = true;
 }
 
 function timing(){
@@ -128,6 +132,12 @@ function setListOfNamesLeftToSpeakInLocalStorage(names) {
 
 function getCurrrentSpeakingMemberInLocalStorage() {
     return JSON.parse(localStorage.getItem('currentSpeakingMember'));
+}
+function getPreviusSpeakingMemberInLocalStorage() {
+    return JSON.parse(localStorage.getItem('previusSpeakingMember'));
+}
+function setPreviusSpeakingMemberInLocalStorage(name) {
+    localStorage.setItem('previusSpeakingMember', JSON.stringify(name));
 }
 function setCurrrentSpeakingMemberInLocalStorage(name) {
     if (name === null) {
