@@ -26,6 +26,10 @@ let currentSpeakingMember;
 const nameElm = document.getElementById('name');
 const debugElm = document.getElementById('debug');
 
+const speachTime = 90;
+let speachInterval;
+
+
 document.addEventListener('DOMContentLoaded', onInit);
 
 
@@ -59,6 +63,7 @@ function onInit() {
 
         }
         else {
+            timing();
             // Det finns en person som 'pratar', skriv ut det till namn divven
             setNameInDiv(currentSpeakingmember);
         }
@@ -70,6 +75,7 @@ function onInit() {
 
 function onNameClick(evt) {
 
+
     if (evt.detail === 2) {
         onNextBtnClick();
     }
@@ -78,28 +84,34 @@ function onNameClick(evt) {
             reset();
         }
     }
-
 }
 
 
 
 function onNextBtnClick() {
+    timing();
     // Hämta ut ett random name från listan
     let currentSpeakingMember = popRandomNameFromLocalStorage();
 
-    if(currentSpeakingMember !== undefined){
-        
-        // Spara det nya namnet i localstorage
-        setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
-        
-        
-        setNameInDiv(currentSpeakingMember);
-        
-    }
-        if (debug) {
-            debugElm.innerHTML = listOfusers;
-    }
+    if (currentSpeakingMember !== undefined) {
 
+        setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
+        setNameInDiv(currentSpeakingMember);
+
+    }
+    if (debug) {
+        debugElm.innerHTML = listOfusers;
+    }
+}
+
+function timing(){
+    removeClass(nameElm,'timesUp');
+    clearInterval(speachInterval);
+    speachInterval = setInterval(function () {
+        console.log('times up');
+        addClass(nameElm,'timesUp');
+        clearInterval(speachInterval);
+    }, speachTime * 1000);
 }
 
 function reset() {
@@ -163,5 +175,21 @@ function popRandomNameFromLocalStorage() {
         setNameInDiv('Klar');
 
         // Visa en starta om knapp
+    }
+}
+
+
+function hasClass(ele, cls) {
+    return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+}
+
+function addClass(ele, cls) {
+    if (!hasClass(ele, cls)) ele.className += " " + cls;
+}
+
+function removeClass(ele, cls) {
+    if (hasClass(ele, cls)) {
+        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+        ele.className = ele.className.replace(reg, ' ');
     }
 }

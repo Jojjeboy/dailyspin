@@ -1,6 +1,7 @@
 .hidden {
     visibility: hidden;
 }
+
 body {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -16,7 +17,7 @@ body {
     height: 10vh;
     background-color: #E8C3B9;
     background-color: #98BEC8;
-    
+
     font-family: Inter, "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
     color: #fff;
 
@@ -34,7 +35,7 @@ body {
 }
 
 
-button{
+button {
     font: inherit;
 }
 
@@ -53,9 +54,32 @@ button{
 }
 
 
-.bg-peach{
+
+@keyframes fadeIt {
+    0% {
+        color: #fff;
+    }
+    100% {
+        color: #AD301B
+    }
+}
+
+@keyframes fadein {
+    from { color: #fff; }
+    to   { color: #AD301B }
+}
+
+
+#name.timesUp {
+    animation: fadein 5s;
+    animation-iteration-count: 1;
+    color:  #AD301B;
+}
+
+.bg-peach {
     background-color: #E8C3B9;
 }
-.bg-greyblue{
+
+.bg-greyblue {
     background-color: #98BEC8;
 }
