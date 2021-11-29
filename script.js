@@ -23,9 +23,10 @@ let allMembers = [
 
 let listOfusers = [];
 let currentSpeakingMember;
+const nameElm = document.getElementById('name');
+const debugElm = document.getElementById('debug');
 
 document.addEventListener('DOMContentLoaded', onInit);
-
 
 
 
@@ -96,7 +97,7 @@ function onNextBtnClick() {
         
     }
         if (debug) {
-        document.getElementById("debug").innerHTML = listOfusers;
+            debugElm.innerHTML = listOfusers;
     }
 
 }
@@ -107,10 +108,10 @@ function reset() {
     setCurrrentSpeakingMemberInLocalStorage(null);
     setNameInDiv('Tryck för att börja');
     if (!debug) {
-        document.getElementById("debug").innerHTML = '';
+        debugElm.innerHTML = '';
     }
     else {
-        document.getElementById("debug").innerHTML = allMembers;
+        debugElm.innerHTML = allMembers;
     }
 }
 
@@ -138,7 +139,7 @@ function setCurrrentSpeakingMemberInLocalStorage(name) {
 
 
 function setNameInDiv(name) {
-    document.getElementById('name').textContent = name;
+    nameElm.textContent = name;
 }
 
 
