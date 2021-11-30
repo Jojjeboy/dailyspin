@@ -77,6 +77,12 @@ button[disabled] {
     border-bottom: 1px solid #AD301B;
 }
 
+#name.done{
+    color: #458f66;
+    border-top: 1px solid #458f66;
+    border-bottom: 1px solid #458f66;
+}
+
 
 
 @keyframes fadeIt {

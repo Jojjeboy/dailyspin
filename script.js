@@ -27,10 +27,11 @@ let previusSpeakingMember;
 
 const nameElm = document.getElementById('name');
 const prevElm = document.getElementById('prev');
+const nextElm = document.getElementById('next');
 
 const debugElm = document.getElementById('debug');
 
-const speachTime = 120;
+const speachTime = 3;
 let speachInterval;
 
 
@@ -54,7 +55,7 @@ function onInit() {
         if (currentSpeakingmember === null) {
             // Mötet har precis börjat, ingen har börjat prata
             // Visa statiskt Text
-            setNameInDiv('Tryck för att börja');
+            setNameInDiv('Tryck nästa för att börja');
         }
         else {
             timing();
@@ -70,6 +71,8 @@ function onInit() {
 
 function onNextBtnClick() {
     timing();
+    removeClass(nameElm,'done');
+    
 
     // Spara undan föregående talare
     speakingMember = getCurrrentSpeakingMemberInLocalStorage();
@@ -91,9 +94,8 @@ function onNextBtnClick() {
 
 
 function previousSpeaker() {
-    setNameInDiv(getPreviusSpeakingMemberInLocalStorage());
-    setCurrrentSpeakingMemberInLocalStorage(getPreviusSpeakingMemberInLocalStorage());
-
+    setNameInDiv(previusSpeakingMember);
+    setCurrrentSpeakingMemberInLocalStorage(previusSpeakingMember);
     prevElm.disabled = true;
 }
 
@@ -108,6 +110,10 @@ function timing(){
 }
 
 function reset() {
+    clearInterval(speachInterval);
+    nextElm.disabled = false;
+    //prevElm.disabled = true;
+
     // Hämta ut ett random name från listan
     setListOfNamesLeftToSpeakInLocalStorage(allMembers);
     setCurrrentSpeakingMemberInLocalStorage(null);
@@ -171,7 +177,10 @@ function popRandomNameFromLocalStorage() {
     } else {
         // Vi är klara
         reset();
+        addClass(nameElm,'done');
+        clearInterval(speachInterval);
         setNameInDiv('Klar');
+        nextElm.disabled = true;
     }
 }
 
