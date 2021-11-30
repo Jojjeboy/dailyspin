@@ -1,9 +1,7 @@
 <html>
-
 <head></head>
 <link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600&display=swap" rel="stylesheet">
 
 <body>
@@ -12,11 +10,12 @@
         <div id="name">
             Tryck nästa för att börja
         </div>
-        
-
+        <div id="sure" class="hide">Är du säker?</div>
         <div id="buttons">
             <button id="prev" onclick="onPreviusBtnClick()">Föregående</button>
+            <button id="im-sure" onclick="onImSureClick()" class="hide">Ja</button>
             <button id="resetbtn" onclick="onResetbtnClick()">Börja om</button>
+            <button id="not-sure" onclick="onImNotSuretClick()" class="hide">Nej</button>
             <button id="next" onclick="onNextBtnClick()">Nästa</button>
         </div>
     </div>

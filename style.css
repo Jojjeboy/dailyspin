@@ -1,4 +1,4 @@
-.hidden {
+.hide {
     visibility: hidden;
 }
 
@@ -31,7 +31,7 @@ body {
 }
 
 #buttons {
-    margin-top: 150px;
+    margin-top: 50px;
 }
 
 button {
@@ -55,18 +55,29 @@ button[disabled] {
     cursor: default;
 }
 
+button:hover:enabled {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    color: #eee;
+}
+
 
 #resetbtn.hidden {
     visibility: hidden;
 }
 
-#name {
+#name{
     font-size: 6em;
     border-top: 1px solid #fff;
     border-bottom: 1px solid #fff;
     padding-top: 30px;
     padding-bottom: 30px;
     margin-top: 500px;
+}
+
+#sure {
+    margin-top: 100px;
+    font-size: 2em;
 }
 
 #name.timesUp {
