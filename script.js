@@ -103,7 +103,7 @@ function timing(){
     removeClass(nameElm,'timesUp');
     clearInterval(speachInterval);
     speachInterval = setInterval(function () {
-        console.log('times up');
+        //console.log('times up');
         addClass(nameElm,'timesUp');
         clearInterval(speachInterval);
     }, speachTime * 1000);
