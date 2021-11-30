@@ -20,33 +20,34 @@ let allMembers = [
     'Rickard'
 ];
 
-
-let listOfusers = [];
+let listOfNamesAlreadySpoken = [];
+let listOfNamesLeftToSpeak = [];
 let currentSpeakingMember;
 let previusSpeakingMember;
 
 const nameElm = document.getElementById('name');
 const prevElm = document.getElementById('prev');
 const nextElm = document.getElementById('next');
-
 const debugElm = document.getElementById('debug');
 
-const speachTime = 3;
+const speachTime = 120;
 let speachInterval;
-
 
 document.addEventListener('DOMContentLoaded', onInit);
 
-
-
 function onInit() {
     // Kommer köras när domen är klar
-    listOfusers = getListOfNamesLeftToSpeakInLocalStorage();
-    if (listOfusers === null || listOfusers.length < 1) {
+    listOfNamesLeftToSpeak = getListOfNamesLeftToSpeakInLocalStorage() || [];
+    listOfNamesAlreadySpoken = getPrevousSpeakingMembersInLocalStorage() || [];
+    if (listOfNamesLeftToSpeak.length < 1) {
         // Finns inget sparat i localstorage
+        
+        // Shuffla om listan så det är slumpmässigt vem som ska prata men 
+        shuffle(allMembers);
+
         // Spara hela listan
         setListOfNamesLeftToSpeakInLocalStorage(allMembers);
-        currentSpeakingMember = null;
+        //currentSpeakingMember = null;
     }
     else {
         // Hämta ut currentSpeakingMember
@@ -64,7 +65,13 @@ function onInit() {
         }
 
         // Hämta ut förra talaren
-        previusSpeakingMember = getPreviusSpeakingMemberInLocalStorage();
+        //previusSpeakingMember = getPrevousSpeakingMembersInLocalStorage();
+    }
+
+    
+    if(listOfNamesAlreadySpoken.length < 1){
+        prevElm.disabled = true;
+        listOfNamesAlreadySpoken = [];
     }
 }
 
@@ -72,32 +79,91 @@ function onInit() {
 function onNextBtnClick() {
     timing();
     removeClass(nameElm,'done');
+
+    
     
 
     // Spara undan föregående talare
     speakingMember = getCurrrentSpeakingMemberInLocalStorage();
-    if (speakingMember !== undefined) {
-        setPreviusSpeakingMemberInLocalStorage(speakingMember);
+    if (speakingMember !== undefined && speakingMember !== null) {
+        listOfNamesAlreadySpoken.push(speakingMember);
+        setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken);
     }
 
+    if(listOfNamesAlreadySpoken.length < 1){
+        prevElm.disabled = true;
+    }
+    else {
+        prevElm.disabled = false;
+    }
+
+    
+    
     // Hämta ut ett random name från listan
-    let currentSpeakingMember = popRandomNameFromLocalStorage();
+    currentSpeakingMember = shiftNextFromList();
     if (currentSpeakingMember !== undefined) {
 
         setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
         setNameInDiv(currentSpeakingMember);
     }
     if (debug) {
-        debugElm.innerHTML = listOfusers;
+        debugElm.innerHTML = listOfNamesLeftToSpeak;
+    }
+
+    if(listOfNamesLeftToSpeak.length < 1){
+        nextElm.disabled = true;
+    }
+    else {
+        nextElm.disabled = false;
+    }
+}
+
+function onResetbtnClick() {
+    clearInterval(speachInterval);
+    removeClass(nameElm,'timesUp');
+    nextElm.disabled = false;
+    prev.disabled = true;
+    
+    // Hämta ut ett random name från listan
+    setListOfNamesLeftToSpeakInLocalStorage(allMembers);
+    listOfNamesAlreadySpoken = []
+    setPrevousSpeakingMemberInLocalStorage(null);
+    setCurrrentSpeakingMemberInLocalStorage(null);
+    setNameInDiv('Tryck för att börja');
+    if (!debug) {
+        debugElm.innerHTML = '';
+    }
+    else {
+        debugElm.innerHTML = allMembers;
+    }
+}
+
+function onPreviusBtnClick() {
+    clearInterval(speachInterval); 
+    timing();
+
+    if(listOfNamesAlreadySpoken.length < 1){
+        prevElm.disabled = true;
+    }
+    else {
+        prevElm.disabled = false;
+    }
+    
+    if(listOfNamesAlreadySpoken.length > 0){
+        listOfNamesLeftToSpeak.unshift(currentSpeakingMember);
+        setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);
+
+        currentSpeakingMember = listOfNamesAlreadySpoken.pop();
+        setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken);
+        setNameInDiv(currentSpeakingMember);
+        setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
+    }
+    if(listOfNamesAlreadySpoken.length === 0){
+        prevElm.disabled = true;
     }
 }
 
 
-function previousSpeaker() {
-    setNameInDiv(previusSpeakingMember);
-    setCurrrentSpeakingMemberInLocalStorage(previusSpeakingMember);
-    prevElm.disabled = true;
-}
 
 function timing(){
     removeClass(nameElm,'timesUp');
@@ -109,29 +175,14 @@ function timing(){
     }, speachTime * 1000);
 }
 
-function reset() {
-    clearInterval(speachInterval);
-    nextElm.disabled = false;
-    //prevElm.disabled = true;
 
-    // Hämta ut ett random name från listan
-    setListOfNamesLeftToSpeakInLocalStorage(allMembers);
-    setCurrrentSpeakingMemberInLocalStorage(null);
-    setNameInDiv('Tryck för att börja');
-    if (!debug) {
-        debugElm.innerHTML = '';
-    }
-    else {
-        debugElm.innerHTML = allMembers;
-    }
-}
 
 
 function getListOfNamesLeftToSpeakInLocalStorage() {
     return JSON.parse(localStorage.getItem('listOfNamesLeftToSpeak'));
 }
 function setListOfNamesLeftToSpeakInLocalStorage(names) {
-    listOfusers = names;
+    listOfNamesLeftToSpeak = names;
     localStorage.setItem('listOfNamesLeftToSpeak', JSON.stringify(names));
 }
 
@@ -139,11 +190,19 @@ function setListOfNamesLeftToSpeakInLocalStorage(names) {
 function getCurrrentSpeakingMemberInLocalStorage() {
     return JSON.parse(localStorage.getItem('currentSpeakingMember'));
 }
-function getPreviusSpeakingMemberInLocalStorage() {
-    return JSON.parse(localStorage.getItem('previusSpeakingMember'));
+
+function getPrevousSpeakingMembersInLocalStorage() {
+    return JSON.parse(localStorage.getItem('previusSpeakingMembers'));
 }
-function setPreviusSpeakingMemberInLocalStorage(name) {
-    localStorage.setItem('previusSpeakingMember', JSON.stringify(name));
+function setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken) {
+    if (listOfNamesAlreadySpoken === null) {
+        localStorage.removeItem('previusSpeakingMembers');
+    }
+    else {
+        localStorage.setItem('previusSpeakingMembers', JSON.stringify(listOfNamesAlreadySpoken));
+    }
+    
+    
 }
 function setCurrrentSpeakingMemberInLocalStorage(name) {
     if (name === null) {
@@ -160,23 +219,22 @@ function setNameInDiv(name) {
 }
 
 
-function popRandomNameFromLocalStorage() {
-    const l = listOfusers.length;
+function shiftNextFromList() {
+    const nrOfPeopleLeftToSpeak = listOfNamesLeftToSpeak.length;
 
-    if (l) {
-        const current = Math.floor(Math.random() * l);
+    if (nrOfPeopleLeftToSpeak) {
 
-        const currentMember = listOfusers[current];
+        currentSpeakingMember = listOfNamesLeftToSpeak.shift();
 
-        listOfusers = listOfusers.filter(x => x !== currentMember);
-        setListOfNamesLeftToSpeakInLocalStorage(listOfusers);
+        listOfNamesLeftToSpeak = listOfNamesLeftToSpeak.filter(x => x !== currentSpeakingMember);
+        setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);
 
 
-        return currentMember;
+        return currentSpeakingMember;
 
     } else {
         // Vi är klara
-        reset();
+        onResetbtnClick();
         addClass(nameElm,'done');
         clearInterval(speachInterval);
         setNameInDiv('Klar');
@@ -199,3 +257,22 @@ function removeClass(ele, cls) {
         ele.className = ele.className.replace(reg, ' ');
     }
 }
+
+
+function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }

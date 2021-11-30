@@ -83,8 +83,6 @@ button[disabled] {
     border-bottom: 1px solid #458f66;
 }
 
-
-
 @keyframes fadeIt {
     0% {
         color: #fff;
