@@ -1,6 +1,6 @@
-const debug = false;
+const debug: boolean = false;
 
-let allMembers = [
+let allMembers: string[] = [
     'Sandra',
     'Per',
     'Peter',
@@ -20,10 +20,9 @@ let allMembers = [
     'Rickard'
 ];
 
-let listOfNamesAlreadySpoken = [];
-let listOfNamesLeftToSpeak = [];
-let currentSpeakingMember;
-let previusSpeakingMember;
+let listOfNamesLeftToSpeak: string[] = [];
+let listOfNamesAlreadySpoken: string[] = [];
+let currentSpeakingMember: string;
 
 const nameElm = document.getElementById('name');
 const prevBtn = document.getElementById('prev');
@@ -32,52 +31,44 @@ const resetBtn = document.getElementById('resetbtn');
 const imSureBtn = document.getElementById('im-sure');
 const notSureBtn = document.getElementById('not-sure');
 const sureElm = document.getElementById('sure');
-
 const debugElm = document.getElementById('debug');
 
-const speachTime = 120;
-let speachInterval;
+const speachTime: number = 120;
+let speachInterval: {};
 
-document.addEventListener('DOMContentLoaded', onInit);
+function hasClass(ele, cls) {
+    return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+}
 
-function onInit() {
-    // Kommer köras när domen är klar
-    listOfNamesLeftToSpeak = getListOfNamesLeftToSpeakInLocalStorage() || [];
-    listOfNamesAlreadySpoken = getPrevousSpeakingMembersInLocalStorage() || [];
-    if (listOfNamesLeftToSpeak.length < 1) {
-        // Finns inget sparat i localstorage
+function addClass(ele, cls) {
+    if (!hasClass(ele, cls)) ele.className += " " + cls;
+}
 
-        // Shuffla om listan så det är slumpmässigt vem som ska prata men 
-        shuffle(allMembers);
-
-        // Spara hela listan
-        setListOfNamesLeftToSpeakInLocalStorage(allMembers);
-        //currentSpeakingMember = null;
-    }
-    else {
-        // Hämta ut currentSpeakingMember
-        currentSpeakingmember = getCurrrentSpeakingMemberInLocalStorage();
-
-        if (currentSpeakingmember === null) {
-            
-            // Mötet har precis börjat, ingen har börjat prata
-            // Visa statiskt Text
-            setNameInDiv('Tryck nästa för att börja');
-        }
-        else {
-            timing();
-            // Det finns en person som 'pratar', skriv ut det till namn divven
-            setNameInDiv(currentSpeakingmember);
-        }
-    }
-
-    if (listOfNamesAlreadySpoken.length < 1) {
-        prevBtn.disabled = true;
-        resetBtn.disabled = true;
-        listOfNamesAlreadySpoken = [];
+function removeClass(ele, cls) {
+    if (hasClass(ele, cls)) {
+        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+        ele.className = ele.className.replace(reg, ' ');
     }
 }
 
+
+function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (currentIndex != 0) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+}
 
 function onNextBtnClick() {
     timing();
@@ -85,7 +76,8 @@ function onNextBtnClick() {
     resetBtn.disabled = false;
 
     // Spara undan föregående talare
-    speakingMember = getCurrrentSpeakingMemberInLocalStorage();
+    //@TODO kan bytas ut mot global variable??
+    let speakingMember = getCurrrentSpeakingMemberInLocalStorage();
     if (speakingMember !== undefined && speakingMember !== null) {
         listOfNamesAlreadySpoken.push(speakingMember);
         setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken);
@@ -106,7 +98,7 @@ function onNextBtnClick() {
         setNameInDiv(currentSpeakingMember);
     }
     if (debug) {
-        debugElm.innerHTML = listOfNamesLeftToSpeak;
+        debugElm.innerHTML = listOfNamesLeftToSpeak.join(',');
     }
 
     if (listOfNamesLeftToSpeak.length < 1) {
@@ -270,37 +262,44 @@ function shiftNextFromList() {
     }
 }
 
+let onInit = (): void => {
+    // Kommer köras när domen är klar
+    listOfNamesLeftToSpeak = getListOfNamesLeftToSpeakInLocalStorage() || [];
+    listOfNamesAlreadySpoken = getPrevousSpeakingMembersInLocalStorage() || [];
+    if (listOfNamesLeftToSpeak.length < 1) {
+        // Finns inget sparat i localstorage
 
-function hasClass(ele, cls) {
-    return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-}
+        // Shuffla om listan så det är slumpmässigt vem som ska prata men 
+        shuffle(allMembers);
 
-function addClass(ele, cls) {
-    if (!hasClass(ele, cls)) ele.className += " " + cls;
-}
-
-function removeClass(ele, cls) {
-    if (hasClass(ele, cls)) {
-        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-        ele.className = ele.className.replace(reg, ' ');
+        // Spara hela listan
+        setListOfNamesLeftToSpeakInLocalStorage(allMembers);
+        //currentSpeakingMember = null;
     }
-}
+    else {
+        // Hämta ut currentSpeakingMember
+        currentSpeakingmember = getCurrrentSpeakingMemberInLocalStorage();
 
-
-function shuffle(array) {
-    let currentIndex = array.length, randomIndex;
-
-    // While there remain elements to shuffle...
-    while (currentIndex != 0) {
-
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-
-        // And swap it with the current element.
-        [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex], array[currentIndex]];
+        if (currentSpeakingmember === null) {
+            
+            // Mötet har precis börjat, ingen har börjat prata
+            // Visa statiskt Text
+            setNameInDiv('Tryck nästa för att börja');
+        }
+        else {
+            timing();
+            // Det finns en person som 'pratar', skriv ut det till namn divven
+            setNameInDiv(currentSpeakingmember);
+        }
     }
 
-    return array;
-}
+    if (listOfNamesAlreadySpoken.length < 1) {
+        prevBtn.disabled = true;
+        resetBtn.disabled = true;
+        listOfNamesAlreadySpoken = [];
+    }
+};
+
+document.addEventListener('DOMContentLoaded', onInit);
+
+
