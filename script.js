@@ -26,11 +26,11 @@ let currentSpeakingMember;
 let previusSpeakingMember;
 
 const nameElm = document.getElementById('name');
-const prevElm = document.getElementById('prev');
-const nextElm = document.getElementById('next');
-const resetElm = document.getElementById('resetbtn');
-const imSureElm = document.getElementById('im-sure');
-const notSureElm = document.getElementById('not-sure');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const resetBtn = document.getElementById('resetbtn');
+const imSureBtn = document.getElementById('im-sure');
+const notSureBtn = document.getElementById('not-sure');
 const sure = document.getElementById('sure');
 
 const debugElm = document.getElementById('debug');
@@ -59,6 +59,7 @@ function onInit() {
         currentSpeakingmember = getCurrrentSpeakingMemberInLocalStorage();
 
         if (currentSpeakingmember === null) {
+            
             // Mötet har precis börjat, ingen har börjat prata
             // Visa statiskt Text
             setNameInDiv('Tryck nästa för att börja');
@@ -68,14 +69,11 @@ function onInit() {
             // Det finns en person som 'pratar', skriv ut det till namn divven
             setNameInDiv(currentSpeakingmember);
         }
-
-        // Hämta ut förra talaren
-        //previusSpeakingMember = getPrevousSpeakingMembersInLocalStorage();
     }
 
     if (listOfNamesAlreadySpoken.length < 1) {
-        prevElm.disabled = true;
-        resetElm.disabled = true;
+        prevBtn.disabled = true;
+        resetBtn.disabled = true;
         listOfNamesAlreadySpoken = [];
     }
 }
@@ -84,7 +82,7 @@ function onInit() {
 function onNextBtnClick() {
     timing();
     removeClass(nameElm, 'done');
-    resetElm.disabled = false;
+    resetBtn.disabled = false;
 
     // Spara undan föregående talare
     speakingMember = getCurrrentSpeakingMemberInLocalStorage();
@@ -94,10 +92,10 @@ function onNextBtnClick() {
     }
 
     if (listOfNamesAlreadySpoken.length < 1) {
-        prevElm.disabled = true;
+        prevBtn.disabled = true;
     }
     else {
-        prevElm.disabled = false;
+        prevBtn.disabled = false;
     }
 
     // Hämta ut ett random name från listan
@@ -112,40 +110,40 @@ function onNextBtnClick() {
     }
 
     if (listOfNamesLeftToSpeak.length < 1) {
-        nextElm.disabled = true;
+        nextBtn.disabled = true;
     }
     else {
-        nextElm.disabled = false;
+        nextBtn.disabled = false;
     }
 }
 
 
 function onResetbtnClick() {
     removeClass(sure, 'hide');
-    removeClass(imSureElm, 'hide');
-    removeClass(notSureElm, 'hide');
-    addClass(resetElm, 'hide');
-    addClass(prevElm, 'hide');
-    addClass(nextElm, 'hide');
+    removeClass(imSureBtn, 'hide');
+    removeClass(notSureBtn, 'hide');
+    addClass(resetBtn, 'hide');
+    addClass(prevBtn, 'hide');
+    addClass(nextBtn, 'hide');
 }
 
 function onImSureClick() {
     addClass(sure, 'hide');
-    addClass(imSureElm, 'hide');
-    addClass(notSureElm, 'hide');
-    removeClass(resetElm, 'hide');
-    removeClass(prevElm, 'hide');
-    removeClass(nextElm, 'hide');
+    addClass(imSureBtn, 'hide');
+    addClass(notSureBtn, 'hide');
+    removeClass(resetBtn, 'hide');
+    removeClass(prevBtn, 'hide');
+    removeClass(nextBtn, 'hide');
     reset();
 }
 
 function onImNotSuretClick() {
     addClass(sure, 'hide');
-    addClass(imSureElm, 'hide');
-    addClass(notSureElm, 'hide');
-    removeClass(resetElm, 'hide');
-    removeClass(prevElm, 'hide');
-    removeClass(nextElm, 'hide');
+    addClass(imSureBtn, 'hide');
+    addClass(notSureBtn, 'hide');
+    removeClass(resetBtn, 'hide');
+    removeClass(prevBtn, 'hide');
+    removeClass(nextBtn, 'hide');
 }
 
 
@@ -154,10 +152,10 @@ function onPreviusBtnClick() {
     timing();
 
     if (listOfNamesAlreadySpoken.length < 1) {
-        prevElm.disabled = true;
+        prevBtn.disabled = true;
     }
     else {
-        prevElm.disabled = false;
+        prevBtn.disabled = false;
     }
 
     if (listOfNamesAlreadySpoken.length > 0) {
@@ -170,16 +168,16 @@ function onPreviusBtnClick() {
         setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
     }
     if (listOfNamesAlreadySpoken.length === 0) {
-        prevElm.disabled = true;
+        prevBtn.disabled = true;
     }
 }
 
 function reset() {
     clearInterval(speachInterval);
     removeClass(nameElm, 'timesUp');
-    nextElm.disabled = false;
+    nextBtn.disabled = false;
     prev.disabled = true;
-    resetElm.disabled = true;
+    resetBtn.disabled = true;
 
     // Hämta ut ett random name från listan
     setListOfNamesLeftToSpeakInLocalStorage(allMembers);
@@ -268,7 +266,7 @@ function shiftNextFromList() {
         addClass(nameElm, 'done');
         clearInterval(speachInterval);
         setNameInDiv('Klar');
-        nextElm.disabled = true;
+        nextBtn.disabled = true;
     }
 }
 
