@@ -265,7 +265,7 @@ function shiftNextFromList() {
     }
 }
 
-let onInit = (): void => {
+const onInit = (): void => {
     // Kommer köras när domen är klar
     listOfNamesLeftToSpeak = getListOfNamesLeftToSpeakInLocalStorage() || [];
     listOfNamesAlreadySpoken = getPrevousSpeakingMembersInLocalStorage() || [];
