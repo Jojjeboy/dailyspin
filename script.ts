@@ -24,17 +24,20 @@ let listOfNamesLeftToSpeak: string[] = [];
 let listOfNamesAlreadySpoken: string[] = [];
 let currentSpeakingMember: string;
 
-const nameElm = document.getElementById('name');
-const prevBtn = document.getElementById('prev');
-const nextBtn = document.getElementById('next');
-const resetBtn = document.getElementById('resetbtn');
-const imSureBtn = document.getElementById('im-sure');
-const notSureBtn = document.getElementById('not-sure');
-const sureElm = document.getElementById('sure');
-const debugElm = document.getElementById('debug');
+
+const nameElm = <HTMLInputElement> document.getElementById("name");
+const prevBtn = <HTMLInputElement> document.getElementById("prev");
+const nextBtn = <HTMLInputElement> document.getElementById("next");
+const resetBtn = <HTMLInputElement> document.getElementById("resetbtn");
+
+const imSureBtn = <HTMLInputElement> document.getElementById("im-sure");
+const notSureBtn = <HTMLInputElement> document.getElementById("not-sure");
+const sureElm = <HTMLInputElement> document.getElementById("sure");
+const debugElm = <HTMLInputElement> document.getElementById("debug");
+
 
 const speachTime: number = 120;
-let speachInterval: {};
+let speachInterval: number;
 
 function hasClass(ele, cls) {
     return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
@@ -168,7 +171,7 @@ function reset() {
     clearInterval(speachInterval);
     removeClass(nameElm, 'timesUp');
     nextBtn.disabled = false;
-    prev.disabled = true;
+    prevBtn.disabled = true;
     resetBtn.disabled = true;
 
     // Hämta ut ett random name från listan
@@ -181,7 +184,7 @@ function reset() {
         debugElm.innerHTML = '';
     }
     else {
-        debugElm.innerHTML = allMembers;
+        debugElm.innerHTML = allMembers.join(',');
     }
 }
 
@@ -278,9 +281,9 @@ let onInit = (): void => {
     }
     else {
         // Hämta ut currentSpeakingMember
-        currentSpeakingmember = getCurrrentSpeakingMemberInLocalStorage();
+        currentSpeakingMember = getCurrrentSpeakingMemberInLocalStorage();
 
-        if (currentSpeakingmember === null) {
+        if (currentSpeakingMember === null) {
             
             // Mötet har precis börjat, ingen har börjat prata
             // Visa statiskt Text
@@ -289,7 +292,7 @@ let onInit = (): void => {
         else {
             timing();
             // Det finns en person som 'pratar', skriv ut det till namn divven
-            setNameInDiv(currentSpeakingmember);
+            setNameInDiv(currentSpeakingMember);
         }
     }
 
