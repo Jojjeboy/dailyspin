@@ -109,12 +109,7 @@ function onNextBtnClick() {
         debugElm.innerHTML = listOfNamesLeftToSpeak;
     }
 
-    if (listOfNamesLeftToSpeak.length < 1) {
-        nextBtn.disabled = true;
-    }
-    else {
-        nextBtn.disabled = false;
-    }
+    
 }
 
 
@@ -175,6 +170,7 @@ function onPreviusBtnClick() {
 function reset() {
     clearInterval(speachInterval);
     removeClass(nameElm, 'timesUp');
+    removeClass(nameElm, 'done');
     nextBtn.disabled = false;
     prev.disabled = true;
     resetBtn.disabled = true;
@@ -267,6 +263,7 @@ function shiftNextFromList() {
         clearInterval(speachInterval);
         setNameInDiv('Klar');
         nextBtn.disabled = true;
+        resetBtn.disabled = false;
     }
 }
 
