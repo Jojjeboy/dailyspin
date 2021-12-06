@@ -1,22 +1,22 @@
 export class LocalStorage {
     
-    getListOfNamesLeftToSpeakInLocalStorage() {
+    getListOfNamesLeftToSpeakInLocalStorage(): string[] {
         return JSON.parse(localStorage.getItem('listOfNamesLeftToSpeak'));
     }
 
-    setListOfNamesLeftToSpeakInLocalStorage(names) {
-        localStorage.setItem('listOfNamesLeftToSpeak', JSON.stringify(names));
+    setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak: string[]) {
+        localStorage.setItem('listOfNamesLeftToSpeak', JSON.stringify(listOfNamesLeftToSpeak));
     }
 
-    getCurrrentSpeakingMemberInLocalStorage() {
+    getCurrrentSpeakingMemberInLocalStorage(): string {
         return JSON.parse(localStorage.getItem('currentSpeakingMember'));
     }
 
-    getPrevousSpeakingMembersInLocalStorage() {
+    getPrevousSpeakingMembersInLocalStorage(): string[] {
         return JSON.parse(localStorage.getItem('previusSpeakingMembers'));
     }
 
-    setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken) {
+    setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken: string[]): void {
         if (listOfNamesAlreadySpoken === null) {
             localStorage.removeItem('previusSpeakingMembers');
         }
@@ -24,7 +24,7 @@ export class LocalStorage {
             localStorage.setItem('previusSpeakingMembers', JSON.stringify(listOfNamesAlreadySpoken));
         }
     }
-    setCurrrentSpeakingMemberInLocalStorage(name) {
+    setCurrrentSpeakingMemberInLocalStorage(name: string): void {
         if (name === null) {
             localStorage.removeItem('currentSpeakingMember');
         }

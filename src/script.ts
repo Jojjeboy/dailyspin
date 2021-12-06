@@ -148,7 +148,6 @@ function reset() {
     clearInterval(speachInterval);
     domHelper.removeClass(nameElm, 'timesUp');
     domHelper.removeClass(nameElm, 'done');
-    
 
     // Hämta ut ett random name från listan
     lStore.setListOfNamesLeftToSpeakInLocalStorage(useMembers);
@@ -187,18 +186,18 @@ function shiftNextFromList() {
         listOfNamesLeftToSpeak = listOfNamesLeftToSpeak.filter(x => x !== currentSpeakingMember);
         lStore.setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);
 
-
-        return currentSpeakingMember;
-
     } else {
         // Vi är klara
         //reset();
         domHelper.addClass(nameElm, 'done');
-        domHelper.setNameInDiv(nameElm, 'Klar');
+
+        currentSpeakingMember = 'Klar';
+
+        domHelper.setNameInDiv(nameElm, currentSpeakingMember);
+        lStore.setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
         clearInterval(speachInterval);
     }
-
-    updateBtnState();
+    return currentSpeakingMember;
 }
 
 
@@ -223,7 +222,7 @@ function updateBtnState(){
 
 
     // Nästa knapp
-    if(listOfNamesAlreadySpoken.length === useMembers.length){
+    if(currentSpeakingMember === 'Klar'){
         nextBtn.disabled = true;
     }
     else {
