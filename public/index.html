@@ -3,7 +3,6 @@
 <link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600&display=swap" rel="stylesheet">
-
 <body>
 
     <div id="wrapper" class="mt-250" style="margin-top: 250px;">
@@ -12,20 +11,16 @@
         </div>
         <div id="sure" class="hide">Är du säker?</div>
         <div id="buttons">
-            <button id="prev" onclick="onPreviusBtnClick()">Föregående</button>
-            <button id="im-sure" onclick="onImSureClick()" class="hide">Ja</button>
-            <button id="resetbtn" onclick="onResetbtnClick()">Börja om</button>
-            <button id="not-sure" onclick="onImNotSuretClick()" class="hide">Nej</button>
-            <button id="next" onclick="onNextBtnClick()">Nästa</button>
+            <button id="prev">Föregående</button>
+            <button id="im-sure" class="hide">Ja</button>
+            <button id="resetbtn">Börja om</button>
+            <button id="not-sure" class="hide">Nej</button>
+            <button id="next">Nästa</button>
         </div>
     </div>
     <div style="margin-top: 150px;">
         <pre id="debug"></pre>
     </div>
+    <script type="module" src="script.js" crossorigin="use-credentials"></script>
 </body>
-<script>var exports = {};</script>
-
-<script src="require.js" crossorigin="use-credentials"></script>
-<script src="dist/script.js" crossorigin="use-credentials"></script>
-
 </html>

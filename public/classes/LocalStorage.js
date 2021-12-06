@@ -1,22 +1,17 @@
-export class LStore {
-    
-    getListOfNamesLeftToSpeakInLocalStorage = function() {
+export class LocalStorage {
+    getListOfNamesLeftToSpeakInLocalStorage() {
         return JSON.parse(localStorage.getItem('listOfNamesLeftToSpeak'));
     }
-
-    setListOfNamesLeftToSpeakInLocalStorage = function(names) {
+    setListOfNamesLeftToSpeakInLocalStorage(names) {
         localStorage.setItem('listOfNamesLeftToSpeak', JSON.stringify(names));
     }
-
-    getCurrrentSpeakingMemberInLocalStorage = function() {
+    getCurrrentSpeakingMemberInLocalStorage() {
         return JSON.parse(localStorage.getItem('currentSpeakingMember'));
     }
-
-    getPrevousSpeakingMembersInLocalStorage = function() {
+    getPrevousSpeakingMembersInLocalStorage() {
         return JSON.parse(localStorage.getItem('previusSpeakingMembers'));
     }
-
-    setPrevousSpeakingMemberInLocalStorage = function(listOfNamesAlreadySpoken) {
+    setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken) {
         if (listOfNamesAlreadySpoken === null) {
             localStorage.removeItem('previusSpeakingMembers');
         }
@@ -24,7 +19,7 @@ export class LStore {
             localStorage.setItem('previusSpeakingMembers', JSON.stringify(listOfNamesAlreadySpoken));
         }
     }
-    setCurrrentSpeakingMemberInLocalStorage = function(name) {
+    setCurrrentSpeakingMemberInLocalStorage(name) {
         if (name === null) {
             localStorage.removeItem('currentSpeakingMember');
         }
@@ -32,5 +27,4 @@ export class LStore {
             localStorage.setItem('currentSpeakingMember', JSON.stringify(name));
         }
     }
-
 }
