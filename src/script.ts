@@ -144,26 +144,9 @@ prevBtn.addEventListener("click", function () {
     updateBtnState();
 });
 
-function reset() {
-    clearInterval(speachInterval);
-    domHelper.removeClass(nameElm, 'timesUp');
-    domHelper.removeClass(nameElm, 'done');
-
-    // Hämta ut ett random name från listan
-    lStore.setListOfNamesLeftToSpeakInLocalStorage(useMembers);
-    listOfNamesLeftToSpeak = useMembers;
-    listOfNamesAlreadySpoken = [];
-    lStore.setPrevousSpeakingMemberInLocalStorage(null);
-    lStore.setCurrrentSpeakingMemberInLocalStorage(null);
-    domHelper.setNameInDiv(nameElm, 'Tryck för att börja');
-    if (!debug) {
-        debugElm.innerHTML = '';
-    }
-    else {
-        debugElm.innerHTML = useMembers.join(',');
-    }
-
-    updateBtnState();
+function reset(){
+    lStore.clearAllKeys();
+    window.location.reload();
 }
 
 function timing() {
@@ -177,9 +160,8 @@ function timing() {
 
 
 function shiftNextFromList() {
-    const nrOfPeopleLeftToSpeak = listOfNamesLeftToSpeak.length;
-
-    if (nrOfPeopleLeftToSpeak) {
+    
+    if (listOfNamesLeftToSpeak.length) {
 
         currentSpeakingMember = listOfNamesLeftToSpeak.shift();
 

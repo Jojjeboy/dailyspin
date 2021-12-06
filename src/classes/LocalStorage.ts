@@ -33,4 +33,10 @@ export class LocalStorage {
         }
     }
 
+    clearAllKeys(): void {
+        localStorage.removeItem('listOfNamesLeftToSpeak');
+        localStorage.removeItem('currentSpeakingMember');
+        localStorage.removeItem('previusSpeakingMembers');
+    }
+
 }
