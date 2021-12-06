@@ -49,7 +49,7 @@ let speachInterval: number;
 
 
 
-function shuffle(array) {
+function shuffle(array: string[]): string[] {
     let currentIndex = array.length, randomIndex;
 
     // While there remain elements to shuffle...
@@ -136,7 +136,7 @@ prevBtn.addEventListener("click", function () {
 
         lStore.setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);
 
-        currentSpeakingMember = listOfNamesAlreadySpoken.pop();
+        currentSpeakingMember = listOfNamesAlreadySpoken.pop() || '';
         lStore.setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken);
         domHelper.setNameInDiv(nameElm, currentSpeakingMember);
         lStore.setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
@@ -163,7 +163,7 @@ function shiftNextFromList() {
     
     if (listOfNamesLeftToSpeak.length) {
 
-        currentSpeakingMember = listOfNamesLeftToSpeak.shift();
+        currentSpeakingMember = listOfNamesLeftToSpeak.shift() || '';
 
         listOfNamesLeftToSpeak = listOfNamesLeftToSpeak.filter(x => x !== currentSpeakingMember);
         lStore.setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);

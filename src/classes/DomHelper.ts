@@ -1,19 +1,19 @@
 export class DomHelper {
-    hasClass(ele, cls): boolean {
+    hasClass(ele: HTMLInputElement, cls: string): boolean {
         return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
     }
     
-    addClass(ele, cls): void {
+    addClass(ele: HTMLInputElement, cls: string): void {
         if (!this.hasClass(ele, cls)) ele.className += " " + cls;
     }
     
-    removeClass(ele, cls): void {
+    removeClass(ele: HTMLInputElement, cls: string): void {
         if (this.hasClass(ele, cls)) {
             var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
             ele.className = ele.className.replace(reg, ' ');
         }
     }
-    setNameInDiv(elm, text): void {
+    setNameInDiv(elm: HTMLInputElement, text: string): void {
         elm.textContent = text;
     }
 }
