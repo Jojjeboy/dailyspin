@@ -1,9 +1,12 @@
 
 const debug: boolean = false;
 import { LocalStorage } from './classes/LocalStorage.js';
-const lStore = new LocalStorage();
+import { DomHelper } from './classes/DomHelper.js';
 
-let allMembers: string[] = [
+const lStore = new LocalStorage();
+const domHelper = new DomHelper();
+
+const useMembers: string[] = [
     'Sandra',
     'Per',
     'Peter',
@@ -23,6 +26,7 @@ let allMembers: string[] = [
     'Rickard'
 ];
 
+let allMembers = [...useMembers];
 let listOfNamesLeftToSpeak: string[] = [];
 let listOfNamesAlreadySpoken: string[] = [];
 let currentSpeakingMember: string;
@@ -42,20 +46,7 @@ const debugElm = <HTMLInputElement>document.getElementById("debug");
 const speachTime: number = 120;
 let speachInterval: number;
 
-function hasClass(ele, cls) {
-    return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-}
 
-function addClass(ele, cls) {
-    if (!hasClass(ele, cls)) ele.className += " " + cls;
-}
-
-function removeClass(ele, cls) {
-    if (hasClass(ele, cls)) {
-        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-        ele.className = ele.className.replace(reg, ' ');
-    }
-}
 
 
 function shuffle(array) {
@@ -77,10 +68,9 @@ function shuffle(array) {
 }
 
 
-nextBtn.addEventListener("click", function() {
+nextBtn.addEventListener("click", function () {
     timing();
-    removeClass(nameElm, 'done');
-    resetBtn.disabled = false;
+    domHelper.removeClass(nameElm, 'done');
 
     // Spara undan föregående talare
     currentSpeakingMember = lStore.getCurrrentSpeakingMemberInLocalStorage();
@@ -89,154 +79,101 @@ nextBtn.addEventListener("click", function() {
         lStore.setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken);
     }
 
-    if (listOfNamesAlreadySpoken.length < 1) {
-        prevBtn.disabled = true;
-    }
-    else {
-        prevBtn.disabled = false;
-    }
-
-    // Hämta ut ett random name från listan
+    // Hämta ut ett nytt namn från listan
     currentSpeakingMember = shiftNextFromList();
     if (currentSpeakingMember !== undefined) {
 
         lStore.setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
-        setNameInDiv(currentSpeakingMember);
+        domHelper.setNameInDiv(nameElm, currentSpeakingMember);
     }
     if (debug) {
         debugElm.innerHTML = listOfNamesLeftToSpeak.join(',');
     }
+
+    updateBtnState();
 });
 
-resetBtn.addEventListener("click", function() {
-    removeClass(sure, 'hide');
-    removeClass(imSureBtn, 'hide');
-    removeClass(notSureBtn, 'hide');
-    addClass(resetBtn, 'hide');
-    addClass(prevBtn, 'hide');
-    addClass(nextBtn, 'hide');
+resetBtn.addEventListener("click", function () {
+    domHelper.removeClass(sure, 'hide');
+    domHelper.removeClass(imSureBtn, 'hide');
+    domHelper.removeClass(notSureBtn, 'hide');
+    domHelper.addClass(resetBtn, 'hide');
+    domHelper.addClass(prevBtn, 'hide');
+    domHelper.addClass(nextBtn, 'hide');
 });
 
-imSureBtn.addEventListener("click", function() {
-    addClass(sure, 'hide');
-    addClass(imSureBtn, 'hide');
-    addClass(notSureBtn, 'hide');
-    removeClass(resetBtn, 'hide');
-    removeClass(prevBtn, 'hide');
-    removeClass(nextBtn, 'hide');
+imSureBtn.addEventListener("click", function () {
+    domHelper.addClass(sure, 'hide');
+    domHelper.addClass(imSureBtn, 'hide');
+    domHelper.addClass(notSureBtn, 'hide');
+    domHelper.removeClass(resetBtn, 'hide');
+    domHelper.removeClass(prevBtn, 'hide');
+    domHelper.removeClass(nextBtn, 'hide');
     reset();
 });
 
-notSureBtn.addEventListener("click", function() {
-    addClass(sure, 'hide');
-    addClass(imSureBtn, 'hide');
-    addClass(notSureBtn, 'hide');
-    removeClass(resetBtn, 'hide');
-    removeClass(prevBtn, 'hide');
-    removeClass(nextBtn, 'hide');
+notSureBtn.addEventListener("click", function () {
+    domHelper.addClass(sure, 'hide');
+    domHelper.addClass(imSureBtn, 'hide');
+    domHelper.addClass(notSureBtn, 'hide');
+    domHelper.removeClass(resetBtn, 'hide');
+    domHelper.removeClass(prevBtn, 'hide');
+    domHelper.removeClass(nextBtn, 'hide');
 });
 
 
 
 prevBtn.addEventListener("click", function () {
     clearInterval(speachInterval);
+    domHelper.removeClass(nameElm, 'done');
     timing();
 
-    if (listOfNamesAlreadySpoken.length < 1) {
-        prevBtn.disabled = true;
-    }
-    else {
-        prevBtn.disabled = false;
-    }
-
     if (listOfNamesAlreadySpoken.length > 0) {
-        listOfNamesLeftToSpeak.unshift(currentSpeakingMember);
+        // Är null om man går tillbaka när det är redan är klart.
+        if (currentSpeakingMember != null) {
+            listOfNamesLeftToSpeak.unshift(currentSpeakingMember);
+        }
+
         lStore.setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);
 
         currentSpeakingMember = listOfNamesAlreadySpoken.pop();
         lStore.setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken);
-        setNameInDiv(currentSpeakingMember);
+        domHelper.setNameInDiv(nameElm, currentSpeakingMember);
         lStore.setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
     }
-    if (listOfNamesAlreadySpoken.length === 0) {
-        prevBtn.disabled = true;
-    }
+    updateBtnState();
 });
 
 function reset() {
     clearInterval(speachInterval);
-    removeClass(nameElm, 'timesUp');
-    removeClass(nameElm, 'done');
-    nextBtn.disabled = false;
-    prevBtn.disabled = true;
-    resetBtn.disabled = true;
+    domHelper.removeClass(nameElm, 'timesUp');
+    domHelper.removeClass(nameElm, 'done');
+    
 
     // Hämta ut ett random name från listan
-    lStore.setListOfNamesLeftToSpeakInLocalStorage(allMembers);
-    listOfNamesLeftToSpeak = allMembers;
+    lStore.setListOfNamesLeftToSpeakInLocalStorage(useMembers);
+    listOfNamesLeftToSpeak = useMembers;
     listOfNamesAlreadySpoken = [];
     lStore.setPrevousSpeakingMemberInLocalStorage(null);
     lStore.setCurrrentSpeakingMemberInLocalStorage(null);
-    setNameInDiv('Tryck för att börja');
+    domHelper.setNameInDiv(nameElm, 'Tryck för att börja');
     if (!debug) {
         debugElm.innerHTML = '';
     }
     else {
-        debugElm.innerHTML = allMembers.join(',');
+        debugElm.innerHTML = useMembers.join(',');
     }
+
+    updateBtnState();
 }
 
 function timing() {
-    removeClass(nameElm, 'timesUp');
+    domHelper.removeClass(nameElm, 'timesUp');
     clearInterval(speachInterval);
     speachInterval = setInterval(function () {
-        //console.log('times up');
-        addClass(nameElm, 'timesUp');
+        domHelper.addClass(nameElm, 'timesUp');
         clearInterval(speachInterval);
     }, speachTime * 1000);
-}
-
-
-
-/*
-function getListOfNamesLeftToSpeakInLocalStorage() {
-    return JSON.parse(localStorage.getItem('listOfNamesLeftToSpeak'));
-}
-function setListOfNamesLeftToSpeakInLocalStorage(names) {
-    listOfNamesLeftToSpeak = names;
-    localStorage.setItem('listOfNamesLeftToSpeak', JSON.stringify(names));
-}
-
-
-function getCurrrentSpeakingMemberInLocalStorage() {
-    return JSON.parse(localStorage.getItem('currentSpeakingMember'));
-}
-
-function getPrevousSpeakingMembersInLocalStorage() {
-    return JSON.parse(localStorage.getItem('previusSpeakingMembers'));
-}
-function setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken) {
-    if (listOfNamesAlreadySpoken === null) {
-        localStorage.removeItem('previusSpeakingMembers');
-    }
-    else {
-        localStorage.setItem('previusSpeakingMembers', JSON.stringify(listOfNamesAlreadySpoken));
-    }
-
-
-}
-function setCurrrentSpeakingMemberInLocalStorage(name) {
-    if (name === null) {
-        localStorage.removeItem('currentSpeakingMember');
-    }
-    else {
-        localStorage.setItem('currentSpeakingMember', JSON.stringify(name));
-    }
-}
-*/
-
-function setNameInDiv(name) {
-    nameElm.textContent = name;
 }
 
 
@@ -256,26 +193,57 @@ function shiftNextFromList() {
     } else {
         // Vi är klara
         //reset();
-        addClass(nameElm, 'done');
+        domHelper.addClass(nameElm, 'done');
+        domHelper.setNameInDiv(nameElm, 'Klar');
         clearInterval(speachInterval);
-        setNameInDiv('Klar');
-        nextBtn.disabled = true;
+    }
+
+    updateBtnState();
+}
+
+
+
+function updateBtnState(){
+    
+    // Föregående knapp
+    if(listOfNamesAlreadySpoken.length > 0) {
+        prevBtn.disabled = false;
+    }
+    else {
+        prevBtn.disabled = true;
+    }
+
+    // Reset knapp
+    if(listOfNamesAlreadySpoken.length > 0 || currentSpeakingMember !== null){
         resetBtn.disabled = false;
+    }
+    else {
+        resetBtn.disabled = true;
+    }
+
+
+    // Nästa knapp
+    if(listOfNamesAlreadySpoken.length === useMembers.length){
+        nextBtn.disabled = true;
+    }
+    else {
+        nextBtn.disabled = false;
     }
 }
 
-const onInit = (): void => {
+
+document.addEventListener('DOMContentLoaded', function () {
     // Kommer köras när domen är klar
     listOfNamesLeftToSpeak = lStore.getListOfNamesLeftToSpeakInLocalStorage() || [];
     listOfNamesAlreadySpoken = lStore.getPrevousSpeakingMembersInLocalStorage() || [];
     if (listOfNamesLeftToSpeak.length < 1) {
         // Finns inget sparat i localstorage
 
-        // Shuffla om listan så det är slumpmässigt vem som ska prata men 
-        shuffle(allMembers);
-
+        // Shuffla om listan så det är slumpmässigt vem som ska prata  
+        listOfNamesLeftToSpeak = allMembers;
+        shuffle(listOfNamesLeftToSpeak);
         // Spara hela listan
-        lStore.setListOfNamesLeftToSpeakInLocalStorage(allMembers);
+        lStore.setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);
         //currentSpeakingMember = null;
     }
     else {
@@ -286,24 +254,16 @@ const onInit = (): void => {
 
             // Mötet har precis börjat, ingen har börjat prata
             // Visa statiskt Text
-            setNameInDiv('Tryck nästa för att börja');
+            domHelper.setNameInDiv(nameElm, 'Tryck för att börja');
         }
         else {
             timing();
             // Det finns en person som 'pratar', skriv ut det till namn divven
-            setNameInDiv(currentSpeakingMember);
+            domHelper.setNameInDiv(nameElm, currentSpeakingMember);
         }
     }
 
-    if (listOfNamesAlreadySpoken.length < 1) {
-        prevBtn.disabled = true;
-        resetBtn.disabled = true;
-        listOfNamesAlreadySpoken = [];
-    }
-
-
-};
-
-document.addEventListener('DOMContentLoaded', onInit);
+    updateBtnState();
+});
 
 

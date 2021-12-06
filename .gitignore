@@ -1,2 +1,4 @@
 node_modules/
 dist/
+public/classes/DomHelper.js
+public/script.js
