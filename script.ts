@@ -1,3 +1,4 @@
+
 const debug: boolean = false;
 
 let allMembers: string[] = [
@@ -32,7 +33,7 @@ const resetBtn = <HTMLInputElement> document.getElementById("resetbtn");
 
 const imSureBtn = <HTMLInputElement> document.getElementById("im-sure");
 const notSureBtn = <HTMLInputElement> document.getElementById("not-sure");
-const sureElm = <HTMLInputElement> document.getElementById("sure");
+const sure = <HTMLInputElement> document.getElementById("sure");
 const debugElm = <HTMLInputElement> document.getElementById("debug");
 
 
@@ -79,11 +80,10 @@ function onNextBtnClick() {
     resetBtn.disabled = false;
 
     // Spara undan föregående talare
-    //@TODO kan bytas ut mot global variable??
-    let speakingMember = getCurrrentSpeakingMemberInLocalStorage();
-    if (speakingMember !== undefined && speakingMember !== null) {
-        listOfNamesAlreadySpoken.push(speakingMember);
-        setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken);
+    currentSpeakingMember = lStore.getCurrrentSpeakingMemberInLocalStorage();
+    if (currentSpeakingMember !== undefined && currentSpeakingMember !== null) {
+        listOfNamesAlreadySpoken.push(currentSpeakingMember);
+        lStore.setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken);
     }
 
     if (listOfNamesAlreadySpoken.length < 1) {
@@ -97,24 +97,17 @@ function onNextBtnClick() {
     currentSpeakingMember = shiftNextFromList();
     if (currentSpeakingMember !== undefined) {
 
-        setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
+        lStore.setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
         setNameInDiv(currentSpeakingMember);
     }
     if (debug) {
         debugElm.innerHTML = listOfNamesLeftToSpeak.join(',');
     }
-
-    if (listOfNamesLeftToSpeak.length < 1) {
-        nextBtn.disabled = true;
-    }
-    else {
-        nextBtn.disabled = false;
-    }
 }
 
 
 function onResetbtnClick() {
-    removeClass(sureElm, 'hide');
+    removeClass(sure, 'hide');
     removeClass(imSureBtn, 'hide');
     removeClass(notSureBtn, 'hide');
     addClass(resetBtn, 'hide');
@@ -123,7 +116,7 @@ function onResetbtnClick() {
 }
 
 function onImSureClick() {
-    addClass(sureElm, 'hide');
+    addClass(sure, 'hide');
     addClass(imSureBtn, 'hide');
     addClass(notSureBtn, 'hide');
     removeClass(resetBtn, 'hide');
@@ -133,7 +126,7 @@ function onImSureClick() {
 }
 
 function onImNotSuretClick() {
-    addClass(sureElm, 'hide');
+    addClass(sure, 'hide');
     addClass(imSureBtn, 'hide');
     addClass(notSureBtn, 'hide');
     removeClass(resetBtn, 'hide');
@@ -155,12 +148,12 @@ function onPreviusBtnClick() {
 
     if (listOfNamesAlreadySpoken.length > 0) {
         listOfNamesLeftToSpeak.unshift(currentSpeakingMember);
-        setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);
+        lStore.setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);
 
         currentSpeakingMember = listOfNamesAlreadySpoken.pop();
-        setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken);
+        lStore.setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken);
         setNameInDiv(currentSpeakingMember);
-        setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
+        lStore.setCurrrentSpeakingMemberInLocalStorage(currentSpeakingMember);
     }
     if (listOfNamesAlreadySpoken.length === 0) {
         prevBtn.disabled = true;
@@ -170,15 +163,16 @@ function onPreviusBtnClick() {
 function reset() {
     clearInterval(speachInterval);
     removeClass(nameElm, 'timesUp');
+    removeClass(nameElm, 'done');
     nextBtn.disabled = false;
     prevBtn.disabled = true;
     resetBtn.disabled = true;
 
     // Hämta ut ett random name från listan
-    setListOfNamesLeftToSpeakInLocalStorage(allMembers);
+    lStore.setListOfNamesLeftToSpeakInLocalStorage(allMembers);
     listOfNamesAlreadySpoken = []
-    setPrevousSpeakingMemberInLocalStorage(null);
-    setCurrrentSpeakingMemberInLocalStorage(null);
+    lStore.setPrevousSpeakingMemberInLocalStorage(null);
+    lStore.setCurrrentSpeakingMemberInLocalStorage(null);
     setNameInDiv('Tryck för att börja');
     if (!debug) {
         debugElm.innerHTML = '';
@@ -200,7 +194,7 @@ function timing() {
 
 
 
-
+/*
 function getListOfNamesLeftToSpeakInLocalStorage() {
     return JSON.parse(localStorage.getItem('listOfNamesLeftToSpeak'));
 }
@@ -235,7 +229,7 @@ function setCurrrentSpeakingMemberInLocalStorage(name) {
         localStorage.setItem('currentSpeakingMember', JSON.stringify(name));
     }
 }
-
+*/
 
 function setNameInDiv(name) {
     nameElm.textContent = name;
@@ -250,7 +244,7 @@ function shiftNextFromList() {
         currentSpeakingMember = listOfNamesLeftToSpeak.shift();
 
         listOfNamesLeftToSpeak = listOfNamesLeftToSpeak.filter(x => x !== currentSpeakingMember);
-        setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);
+        lStore.setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);
 
 
         return currentSpeakingMember;
@@ -262,13 +256,14 @@ function shiftNextFromList() {
         clearInterval(speachInterval);
         setNameInDiv('Klar');
         nextBtn.disabled = true;
+        resetBtn.disabled = false;
     }
 }
 
 const onInit = (): void => {
     // Kommer köras när domen är klar
-    listOfNamesLeftToSpeak = getListOfNamesLeftToSpeakInLocalStorage() || [];
-    listOfNamesAlreadySpoken = getPrevousSpeakingMembersInLocalStorage() || [];
+    listOfNamesLeftToSpeak = lStore.getListOfNamesLeftToSpeakInLocalStorage() || [];
+    listOfNamesAlreadySpoken = lStore.getPrevousSpeakingMembersInLocalStorage() || [];
     if (listOfNamesLeftToSpeak.length < 1) {
         // Finns inget sparat i localstorage
 
@@ -276,12 +271,12 @@ const onInit = (): void => {
         shuffle(allMembers);
 
         // Spara hela listan
-        setListOfNamesLeftToSpeakInLocalStorage(allMembers);
+        lStore.setListOfNamesLeftToSpeakInLocalStorage(allMembers);
         //currentSpeakingMember = null;
     }
     else {
         // Hämta ut currentSpeakingMember
-        currentSpeakingMember = getCurrrentSpeakingMemberInLocalStorage();
+        currentSpeakingMember = lStore.getCurrrentSpeakingMemberInLocalStorage();
 
         if (currentSpeakingMember === null) {
             
@@ -301,7 +296,12 @@ const onInit = (): void => {
         resetBtn.disabled = true;
         listOfNamesAlreadySpoken = [];
     }
+
+    
+let lStore = new LStore();
+    
 };
+import { LStore } from './modules/lStore';
 
 document.addEventListener('DOMContentLoaded', onInit);
 

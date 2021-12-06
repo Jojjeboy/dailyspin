@@ -27,7 +27,7 @@ var nextBtn = document.getElementById("next");
 var resetBtn = document.getElementById("resetbtn");
 var imSureBtn = document.getElementById("im-sure");
 var notSureBtn = document.getElementById("not-sure");
-var sureElm = document.getElementById("sure");
+var sure = document.getElementById("sure");
 var debugElm = document.getElementById("debug");
 var speachTime = 120;
 var speachInterval;
@@ -64,10 +64,9 @@ function onNextBtnClick() {
     removeClass(nameElm, 'done');
     resetBtn.disabled = false;
     // Spara undan föregående talare
-    //@TODO kan bytas ut mot global variable??
-    var speakingMember = getCurrrentSpeakingMemberInLocalStorage();
-    if (speakingMember !== undefined && speakingMember !== null) {
-        listOfNamesAlreadySpoken.push(speakingMember);
+    currentSpeakingMember = getCurrrentSpeakingMemberInLocalStorage();
+    if (currentSpeakingMember !== undefined && currentSpeakingMember !== null) {
+        listOfNamesAlreadySpoken.push(currentSpeakingMember);
         setPrevousSpeakingMemberInLocalStorage(listOfNamesAlreadySpoken);
     }
     if (listOfNamesAlreadySpoken.length < 1) {
@@ -85,15 +84,9 @@ function onNextBtnClick() {
     if (debug) {
         debugElm.innerHTML = listOfNamesLeftToSpeak.join(',');
     }
-    if (listOfNamesLeftToSpeak.length < 1) {
-        nextBtn.disabled = true;
-    }
-    else {
-        nextBtn.disabled = false;
-    }
 }
 function onResetbtnClick() {
-    removeClass(sureElm, 'hide');
+    removeClass(sure, 'hide');
     removeClass(imSureBtn, 'hide');
     removeClass(notSureBtn, 'hide');
     addClass(resetBtn, 'hide');
@@ -101,7 +94,7 @@ function onResetbtnClick() {
     addClass(nextBtn, 'hide');
 }
 function onImSureClick() {
-    addClass(sureElm, 'hide');
+    addClass(sure, 'hide');
     addClass(imSureBtn, 'hide');
     addClass(notSureBtn, 'hide');
     removeClass(resetBtn, 'hide');
@@ -110,7 +103,7 @@ function onImSureClick() {
     reset();
 }
 function onImNotSuretClick() {
-    addClass(sureElm, 'hide');
+    addClass(sure, 'hide');
     addClass(imSureBtn, 'hide');
     addClass(notSureBtn, 'hide');
     removeClass(resetBtn, 'hide');
@@ -141,6 +134,7 @@ function onPreviusBtnClick() {
 function reset() {
     clearInterval(speachInterval);
     removeClass(nameElm, 'timesUp');
+    removeClass(nameElm, 'done');
     nextBtn.disabled = false;
     prevBtn.disabled = true;
     resetBtn.disabled = true;
@@ -213,6 +207,7 @@ function shiftNextFromList() {
         clearInterval(speachInterval);
         setNameInDiv('Klar');
         nextBtn.disabled = true;
+        resetBtn.disabled = false;
     }
 }
 var onInit = function () {
@@ -248,4 +243,3 @@ var onInit = function () {
     }
 };
 document.addEventListener('DOMContentLoaded', onInit);
-//# sourceMappingURL=script.js.map
