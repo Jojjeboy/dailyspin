@@ -1,9 +1,13 @@
 import './styles/style.scss';
+import '@fortawesome/fontawesome-free/js/fontawesome'
+import '@fortawesome/fontawesome-free/js/solid'
+import '@fortawesome/fontawesome-free/js/regular'
+import '@fortawesome/fontawesome-free/js/brands'
 import { DomHelper } from './classes/DomHelper'
 import { LocalStorage } from './classes/LocalStorage'
 
 
-const debug: boolean = true;
+const debug: boolean = false;
 
 const lStore = new LocalStorage();
 const domHelper = new DomHelper();
@@ -89,7 +93,8 @@ nextBtn.addEventListener("click", function () {
         domHelper.setNameInDiv(nameElm, currentSpeakingMember);
     }
     if (debug) {
-        debugElm.innerHTML = listOfNamesLeftToSpeak.join(',');
+        let shuffledArr: string[] = shuffle([...listOfNamesLeftToSpeak]);
+        debugElm.innerHTML = shuffledArr.join(',');
     }
 
     updateBtnState();

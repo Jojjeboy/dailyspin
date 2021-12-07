@@ -32,6 +32,7 @@
     "webpack-md5-hash": "0.0.6"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "normalize.css": "^8.0.1"
   }
 }
