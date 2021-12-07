@@ -6,6 +6,8 @@
 }
 
 body {
+    margin: 0;
+    padding: 0;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -76,6 +78,29 @@ button:hover:enabled {
     z-index: -1;
 }
 
+
+@keyframes pulse {
+    0% {
+        color: #7ea8df;
+    }
+
+    25% {
+        color: #fff;
+    }
+
+    50% {
+        color: #7ea8df;
+    }
+
+    75% {
+        color: #fff;
+    }
+
+    100% {
+        color: #7ea8df;
+    }
+}
+
 #resetbtn.hidden {
     visibility: hidden;
 }
@@ -95,11 +120,13 @@ button:hover:enabled {
 }
 
 #name.timesUp {
-    animation: fadein 10s;
-    animation-iteration-count: 1;
-    color: #ad301b;
-    border-top: 1px solid #ad301b;
-    border-bottom: 1px solid #ad301b;
+    animation: pulse 5s infinite;
+
+    //animation: fadein 10s;
+    //animation-iteration-count: 1;
+    //color: #ad301b;
+    //border-top: 1px solid #ad301b;
+    //border-bottom: 1px solid #ad301b;
 }
 
 #name.done {
