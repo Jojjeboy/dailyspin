@@ -164,6 +164,10 @@ function shiftNextFromList() {
     if (listOfNamesLeftToSpeak.length) {
 
         currentSpeakingMember = listOfNamesLeftToSpeak.shift() || '';
+        if(currentSpeakingMember === 'Klar'){
+            clearInterval(speachInterval);
+            domHelper.addClass(nameElm, 'done');
+        }
 
         listOfNamesLeftToSpeak = listOfNamesLeftToSpeak.filter(x => x !== currentSpeakingMember);
         lStore.setListOfNamesLeftToSpeakInLocalStorage(listOfNamesLeftToSpeak);
