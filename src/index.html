@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600&display=swap" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>DailySpin</title>
+    <link
+      rel="stylesheet"
+      href="<%=htmlWebpackPlugin.files.chunks.main.css %>"
+    />
+  </head>
+
+  <body>
+    <div id="wrapper" class="mt-250" style="margin-top: 250px;">
+      <div id="name">
+          Tryck för att börja
+      </div>
+      <div id="sure" class="hide">Är du säker?</div>
+      <div id="buttons">
+          <button id="prev">Föregående</button>
+          <button id="im-sure" class="hide">Ja</button>
+          <button id="resetbtn">Börja om</button>
+          <button id="not-sure" class="hide">Nej</button>
+          <button id="next">Nästa</button>
+      </div>
+  </div>
+  <div style="margin-top: 150px;">
+      <pre id="debug"></pre>
+  </div>
+    <script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>
+  </body>
+</html>

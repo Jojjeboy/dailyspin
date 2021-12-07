@@ -1,7 +1,9 @@
+import './styles/style.scss';
+import { DomHelper } from './classes/DomHelper'
+import { LocalStorage } from './classes/LocalStorage'
 
-const debug: boolean = false;
-import { LocalStorage } from './classes/LocalStorage.js';
-import { DomHelper } from './classes/DomHelper.js';
+
+const debug: boolean = true;
 
 const lStore = new LocalStorage();
 const domHelper = new DomHelper();
@@ -44,7 +46,7 @@ const debugElm = <HTMLInputElement>document.getElementById("debug");
 
 
 const speachTime: number = 120;
-let speachInterval: number;
+let speachInterval: any;
 
 
 
@@ -250,5 +252,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updateBtnState();
 });
+
 
 

@@ -1,5 +1,3 @@
-node_modules/
-dist/
-public/classes/DomHelper.js
-public/script.js
-public/classes/LocalStorage.js
+node_modules
+
+/dist

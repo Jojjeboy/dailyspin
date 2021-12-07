@@ -1,0 +1,15 @@
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  color: $primary-color;
+  background: #98bec8;
+}
+
+.center {
+  text-align: center
+}
