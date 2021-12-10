@@ -44,7 +44,7 @@ const debugElm = <HTMLInputElement>document.getElementById("debug");
 
 
 const speachTime: number = 120;
-let speachInterval: number;
+let speachInterval: any;
 
 
 
